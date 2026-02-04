@@ -1,0 +1,189 @@
+:root {
+  /* Premium Medical Design System - Refined */
+  --bg-app: #fcfcfc;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #ffffff;
+  --sidebar-border: #f2f2f2;
+  --divider: #f2f2f2;
+
+  --primary: #2bbf90;
+  --primary-soft: #f0faf7;
+  --primary-hover: #24a37a;
+
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  --shadow-bubble: 0 2px 8px rgba(0, 0, 0, 0.03);
+
+  --radius-bubble: 24px;
+  --radius-card: 24px;
+  --radius-input: 16px;
+  --radius-item: 12px;
+
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] {
+  --bg-app: #0c0e12;
+  --bg-surface: #15181e;
+  --bg-sidebar: #15181e;
+  --sidebar-border: #1f242d;
+  --divider: #1f242d;
+
+  --text-main: #f1f3f4;
+  --text-muted: #9aa0a6;
+  --text-dim: #5f6368;
+
+  --primary-soft: rgba(37, 185, 144, 0.1);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* SaaS Component Utilities */
+.saas-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--sidebar-border);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.saas-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glow-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Layout Grid System */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-app);
+}
+
+.main-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-surface);
+  position: relative;
+}
+
+/* Responsive Mobile Layout */
+@media (max-width: 1024px) {
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    z-index: 100;
+    width: 280px;
+    height: 100vh;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar.open {
+    transform: translateX(280px);
+    /* Translate from -280px to 0 relative to parent? No, left is -280px. */
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+  }
+
+  .sidebar-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .app-layout {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-messages {
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .chat-header {
+    padding: 0 1rem;
+    height: 64px;
+  }
+
+  .chat-footer {
+    padding: 1rem;
+  }
+
+  .input-container {
+    padding: 8px 12px;
+    gap: 12px;
+  }
+
+  .btn-send {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Transitions */
+.transition-standard {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scrollbar Style */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--sidebar-border);
+  border-radius: 3px;
+}
