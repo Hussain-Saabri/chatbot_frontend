@@ -16,7 +16,7 @@ export default function ChatHeader() {
                 <div className="dr-avatar relative">
                     <Image
                         src="/avatar.png"
-                        alt="Nova AI"
+                        alt="Nura AI"
                         width={44}
                         height={44}
                         className="object-cover"
@@ -25,7 +25,7 @@ export default function ChatHeader() {
                 </div>
                 <div className="flex flex-col">
                     <div className="flex items-center gap-1.5">
-                        <span className="dr-name">Dr. Nova AI</span>
+                        <span className="dr-name">Dr. Nura AI</span>
                     </div>
                     <span className="dr-description text-[12px] text-text-muted font-medium">Professional Healthcare Assistant</span>
                 </div>

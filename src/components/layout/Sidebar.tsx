@@ -11,6 +11,7 @@ import {
     LogOut
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import Logo from "@/components/common/Logo";
 import { useTheme } from "@/components/ThemeContext";
 import { useLayout } from "./LayoutContext";
 import { useRouter } from "next/navigation";
@@ -27,7 +28,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
     const { theme, toggleTheme } = useTheme();
     const { isSidebarOpen, toggleSidebar, closeSidebar } = useLayout();
     const router = useRouter();
-
+    const API = process.env.NEXT_PUBLIC_API_URL;
     const handleLogout = () => {
         localStorage.removeItem("token");
         router.push("/login");
@@ -51,7 +52,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
         const fetchConversations = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await fetch("http://localhost:5000/api/chat/conversations", {
+                const res = await fetch(`${API}/api/chat/conversations`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -78,8 +79,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
         <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
             <div className="sidebar-logo flex items-center justify-between">
                 <div className="flex items-center">
-                    <Activity size={24} strokeWidth={3} className="mr-2" />
-                    <span>Nova AI</span>
+                    <Logo size="md" />
                 </div>
                 <button
                     className="sidebar-close-btn"

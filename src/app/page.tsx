@@ -8,6 +8,7 @@ import { ShieldCheck, MessageSquare, MapPin, Activity } from "lucide-react";
 import { useLayout } from "@/components/layout/LayoutContext";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "@/components/common/Logo";
 
 interface Message {
   id: string;
@@ -24,6 +25,7 @@ export default function Home() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
     // Small timeout to ensure DOM has updated after state change
@@ -57,7 +59,7 @@ export default function Home() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch(`${API}/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +139,7 @@ export default function Home() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/chat/conversations/${id}`, {
+      const res = await fetch(`${API}/api/chat/conversations/${id}`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) {
@@ -185,39 +187,39 @@ export default function Home() {
                 </div>
               ) : messages.length === 0 ? (
                 <div className="landing-view chat-fade-in">
-                  <div className="landing-icon-wrapper">
-                    <Activity size={32} />
+                  <div className="flex justify-center" style={{ marginBottom: '2.5rem' }}>
+                    <Logo size="xl" />
                   </div>
                   <h1 className="landing-title">How can I help you today?</h1>
                   <p className="landing-subtitle">
-                    I&apos;m Dr. Nova AI, your professional healthcare assistant. Ask me anything about your health.
+                    I&apos;m Dr. Nura AI, your professional healthcare assistant. Ask me anything about your health.
                   </p>
                 </div>
               ) : (
                 <div className="messages-list">
-  {messages.map((msg) => (
-    <ChatMessage
-      key={msg.id}
-      sender={msg.sender}
-      content={msg.content}
-      timestamp={msg.timestamp}
-      isStreaming={msg.id === streamingMessageId}
-    />
-  ))}
+                  {messages.map((msg) => (
+                    <ChatMessage
+                      key={msg.id}
+                      sender={msg.sender}
+                      content={msg.content}
+                      timestamp={msg.timestamp}
+                      isStreaming={msg.id === streamingMessageId}
+                    />
+                  ))}
 
-  {isTyping && (
-    <div className="bubble bubble-ai typing-indicator chat-fade-in">
-      <div className="flex gap-1.5 pt-1 pb-1 px-1">
-        <span className="dot"></span>
-        <span className="dot"></span>
-        <span className="dot"></span>
-      </div>
-    </div>
-  )}
+                  {isTyping && (
+                    <div className="bubble bubble-ai typing-indicator chat-fade-in">
+                      <div className="flex gap-1.5 pt-1 pb-1 px-1">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                      </div>
+                    </div>
+                  )}
 
-  {/* 👇 THIS IS THE IMPORTANT PART */}
-  <div ref={messagesEndRef} />
-</div>
+                  {/* 👇 THIS IS THE IMPORTANT PART */}
+                  <div ref={messagesEndRef} />
+                </div>
 
               )}
             </div>

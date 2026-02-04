@@ -1,23 +1,20 @@
 "use client";
 
 import { Activity, Bell, Search } from "lucide-react";
+import Logo from "@/components/common/Logo";
 
 export default function TopBar() {
     return (
         <header className="glass-card px-8 h-20 flex items-center justify-between">
             <div className="flex items-center gap-6">
                 <div className="relative">
-                    <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-primary-teal ring-offset-2 glow-ring flex items-center justify-center">
-                        <img
-                            src="https://api.dicebear.com/7.x/bottts/svg?seed=DrNova"
-                            alt="Dr Nova AI"
-                            className="avatar-img"
-                        />
+                    <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-primary-teal ring-offset-2 glow-ring flex items-center justify-center bg-white dark:bg-gray-800">
+                        <Logo size="md" iconOnly />
                     </div>
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                 </div>
                 <div>
-                    <h1 className="text-lg font-bold">Dr. Nova AI</h1>
+                    <h1 className="text-lg font-bold">Dr. Nura AI</h1>
                     <p className="text-xs text-text-muted">Cognitive Health Assistant • Online</p>
                 </div>
             </div>

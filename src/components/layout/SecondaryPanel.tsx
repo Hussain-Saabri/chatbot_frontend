@@ -73,7 +73,7 @@ export default function SecondaryPanel() {
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[11px] font-semibold">Blood_Work_Jan.pdf</span>
-                            <span className="text-[9px] text-text-dim text-xs">Analyzed by Nova AI</span>
+                            <span className="text-[9px] text-text-dim text-xs">Analyzed by Nura AI</span>
                         </div>
                     </div>
 

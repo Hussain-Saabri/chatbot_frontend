@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Lock, Activity, ArrowRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Logo from '@/components/common/Logo';
 import '@/styles/auth.css';
 import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
@@ -13,27 +14,27 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-
+    const API = process.env.NEXT_PUBLIC_API_URL;
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
-        
+
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
+            const response = await fetch(`${API}/api/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
             });
-            
+
             const data = await response.json();
-            
+
             if (data.token) {
-    localStorage.setItem('token', data.token); // Token save ho gaya
-}
+                localStorage.setItem('token', data.token); // Token save ho gaya
+            }
             if (response.ok) {
                 toast.success('User logged in successfully!');
                 setTimeout(() => {
@@ -62,7 +63,7 @@ export default function LoginPage() {
                 >
                     <img
                         src="/auth-illustration.png"
-                        alt="Nova AI Illustration"
+                        alt="Nura AI Illustration"
                         className="illustration-image"
                     />
                 </motion.div>
@@ -76,15 +77,12 @@ export default function LoginPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="auth-logo">
-                        <div className="logo-icon">
-                            <Activity size={24} />
-                        </div>
-                        <span className="logo-text">Nova<span style={{ color: 'var(--primary)' }}>AI</span></span>
+                    <div className="flex justify-center" style={{ marginBottom: '30px' }}>
+                        <Logo size="xl" />
                     </div>
 
                     <div className="auth-header">
-                        <h1>Welcome back</h1>
+                        <h1 style={{ marginTop: '-40px' }}>Welcome back</h1>
                     </div>
 
                     {error && (

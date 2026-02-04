@@ -20,8 +20,8 @@ export default function MessageCard({ role, content, timestamp }: MessageCardPro
         >
             <div
                 className={`max-w-[80%] glass-card p-6 relative group ${isAssistant
-                        ? "rounded-bl-none border-l-4 border-l-primary-teal"
-                        : "rounded-br-none bg-primary-teal/5 border-primary-teal/20"
+                    ? "rounded-bl-none border-l-4 border-l-primary-teal"
+                    : "rounded-br-none bg-primary-teal/5 border-primary-teal/20"
                     }`}
             >
                 {isAssistant && (
@@ -29,7 +29,7 @@ export default function MessageCard({ role, content, timestamp }: MessageCardPro
                         <div className="w-6 h-6 rounded-full bg-primary-teal flex items-center justify-center text-[10px] text-white font-bold">
                             DR
                         </div>
-                        <span className="text-[10px] font-bold text-primary-teal uppercase tracking-widest">NOVA ANALYSIS</span>
+                        <span className="text-[10px] font-bold text-primary-teal uppercase tracking-widest">NURA ANALYSIS</span>
                     </div>
                 )}
 

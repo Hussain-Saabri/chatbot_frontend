@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Mail, Lock, User, UserPlus, Activity, Loader2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Mail, Lock, User, UserPlus, Activity, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { motion } from "framer-motion";
+import Logo from "@/components/common/Logo";
 import '@/styles/auth.css';
 import { toast } from 'sonner';
 
@@ -13,14 +14,14 @@ export default function SignupPage() {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-
+    const API = process.env.NEXT_PUBLIC_API_URL;
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/signup', {
+            const response = await fetch(`${API}/api/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ export default function SignupPage() {
                 >
                     <img
                         src="/auth-illustration.png"
-                        alt="Join Nova AI"
+                        alt="Join Nura AI"
                         className="illustration-image"
                     />
                 </motion.div>
@@ -72,11 +73,8 @@ export default function SignupPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="auth-logo">
-                        <div className="logo-icon">
-                            <Activity size={24} />
-                        </div>
-                        <span className="logo-text">Nova<span style={{ color: 'var(--primary)' }}>AI</span></span>
+                    <div className="flex justify-center" style={{ marginBottom: '30px' }}>
+                        <Logo size="xl" />
                     </div>
 
                     <div className="auth-header" style={{ marginTop: '-20px' }}>

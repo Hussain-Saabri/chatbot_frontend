@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function MedicalDashboard() {
     const [messages, setMessages] = useState([
-        { role: "assistant", content: "Hello! I'm Dr. Nova, your AI cognitive health assistant. I've analyzed your recent biometric data from your wearables. How can I assist you today?", timestamp: "09:41 AM" },
+        { role: "assistant", content: "Hello! I'm Dr. Nura, your AI cognitive health assistant. I've analyzed your recent biometric data from your wearables. How can I assist you today?", timestamp: "09:41 AM" },
         { role: "user", content: "I've been feeling a bit more tired than usual in the mornings. Can you check my sleep data?", timestamp: "09:42 AM" },
         { role: "assistant", content: "I've reviewed your sleep cycles from the last 7 days. Your REM sleep has decreased by 18%, and your heart rate variability (HRV) shows signs of mild physiological stress. Would you like me to suggest a recovery protocol or schedule a consultation?", timestamp: "09:43 AM" },
     ]);
@@ -45,7 +45,7 @@ export default function MedicalDashboard() {
                     <div className="mt-6 relative">
                         <div className="absolute -top-12 left-1/2 -translate-x-1/2 glass-pill px-4 py-1 flex items-center gap-2 text-[10px] font-bold text-primary-teal animate-bounce">
                             <Sparkles size={12} />
-                            DR NOVA IS THINKING...
+                            DR NURA IS THINKING...
                         </div>
 
                         <div className="glass-card !rounded-full p-2 flex items-center gap-2 border-primary-teal/20 shadow-xl shadow-teal-900/5">
@@ -56,7 +56,7 @@ export default function MedicalDashboard() {
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder="Ask Dr. Nova about your health..."
+                                placeholder="Ask Dr. Nura about your health..."
                                 className="flex-1 bg-transparent border-none outline-none px-2 text-sm"
                             />
                             <button

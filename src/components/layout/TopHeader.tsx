@@ -1,6 +1,7 @@
 "use client";
 
-import { Bell, Search, ShieldCheck, Sun, Moon, User } from "lucide-react";
+import { Bell, Search, Sun, Moon, User } from "lucide-react";
+import Logo from "@/components/common/Logo";
 import { useTheme } from "@/components/ThemeContext";
 
 export default function TopHeader() {
@@ -10,12 +11,12 @@ export default function TopHeader() {
         <header className="top-header">
             <div className="header-left">
                 <div className="assistant-profile">
-                    <div className="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center text-primary border border-primary/20">
-                        <ShieldCheck size={20} />
+                    <div className="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center border border-primary/20 overflow-hidden">
+                        <Logo size="sm" iconOnly />
                     </div>
                     <div>
                         <div className="flex items-center gap-2">
-                            <span className="font-bold text-sm">Dr. Nova AI</span>
+                            <span className="font-bold text-sm">Dr. Nura AI</span>
                             <div className="status-badge">
                                 <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                                 <span>Verified</span>
