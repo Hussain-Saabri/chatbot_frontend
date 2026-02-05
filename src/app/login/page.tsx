@@ -127,13 +127,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="form-options">
-                            <label className="checkbox-group">
-                                <input type="checkbox" id="remember" />
-                                <span>Keep me logged in</span>
-                            </label>
-                            <Link href="#" className="auth-link" style={{ fontSize: '0.9rem' }}>
-                                Forgot password?
-                            </Link>
+                            
                         </div>
 
                         <button type="submit" className="auth-btn" disabled={isLoading}>

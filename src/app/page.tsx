@@ -9,6 +9,7 @@ import { useLayout } from "@/components/layout/LayoutContext";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "@/components/common/Logo";
+import { useRouter } from "next/navigation";
 
 interface Message {
   id: string;
@@ -25,6 +26,7 @@ export default function Home() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
@@ -71,6 +73,12 @@ export default function Home() {
         })
       });
 
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        router.push("/login");
+        return;
+      }
+
       if (!response.ok) throw new Error("Failed to get response");
 
       const headerConvId = response.headers.get("x-conversation-id");
@@ -88,7 +96,6 @@ export default function Home() {
 
       const aiMsgId = "ai-" + Date.now();
       setStreamingMessageId(aiMsgId);
-
       setMessages((prev) => [
         ...prev,
         {
@@ -142,6 +149,11 @@ export default function Home() {
       const res = await fetch(`${API}/api/chat/conversations/${id}`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        router.push("/login");
+        return;
+      }
       if (res.ok) {
         const data = await res.json();
         const formattedMessages: Message[] = data.map((m: any) => ({
@@ -187,9 +199,7 @@ export default function Home() {
                 </div>
               ) : messages.length === 0 ? (
                 <div className="landing-view chat-fade-in">
-                  <div className="flex justify-center" style={{ marginBottom: '2.5rem' }}>
-                    <Logo size="xl" />
-                  </div>
+
                   <h1 className="landing-title">How can I help you today?</h1>
                   <p className="landing-subtitle">
                     I&apos;m Dr. Nura AI, your professional healthcare assistant. Ask me anything about your health.

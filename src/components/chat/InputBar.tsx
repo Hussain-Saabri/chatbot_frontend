@@ -21,7 +21,7 @@ export default function InputBar({ onSendMessage }: InputBarProps) {
     };
 
     return (
-        <footer className="chat-footer">
+        <footer className="chat-footer" style={{ marginBottom: '-0.5rem' }}>
             <form onSubmit={handleSubmit} className={`input-container ${isFocused ? 'focused' : ''}`}>
                 <input
                     type="text"

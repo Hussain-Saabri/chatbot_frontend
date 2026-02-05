@@ -55,6 +55,11 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                 const res = await fetch(`${API}/api/chat/conversations`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
+                if (res.status === 401) {
+                    localStorage.removeItem("token");
+                    router.push("/login");
+                    return;
+                }
                 if (res.ok) {
                     const data = await res.json();
                     setConversations(data);

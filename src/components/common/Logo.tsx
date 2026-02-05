@@ -30,20 +30,22 @@ export default function Logo({ size = 'md', className = '', iconOnly = false }: 
                         WebkitTextFillColor: 'transparent',
                     }}
                 >
-                    Nura
+                    {iconOnly ? 'N' : 'Nura'}
                 </span>
-                <span
-                    className="font-light ml-1"
-                    style={{
-                        fontSize: `calc(${currentSize.fontSize} * 0.95)`,
-                        background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        letterSpacing: '0.02em'
-                    }}
-                >
-                    AI
-                </span>
+                {!iconOnly && (
+                    <span
+                        className="font-light ml-1"
+                        style={{
+                            fontSize: `calc(${currentSize.fontSize} * 0.95)`,
+                            background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            letterSpacing: '0.02em'
+                        }}
+                    >
+                        AI
+                    </span>
+                )}
             </div>
         </div>
     );

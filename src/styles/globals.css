@@ -60,7 +60,7 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
-  height: 100vh;
+  height: 100dvh;
 }
 
 /* SaaS Component Utilities */
@@ -88,7 +88,7 @@ body {
 /* Layout Grid System */
 .app-layout {
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   position: relative;
   overflow: hidden;
@@ -112,7 +112,7 @@ body {
     top: 0;
     z-index: 100;
     width: 280px;
-    height: 100vh;
+    height: 100dvh;
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
