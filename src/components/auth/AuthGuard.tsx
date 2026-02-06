@@ -28,15 +28,15 @@ export default function AuthGuard({ children }: AuthGuardProps) {
             // Check for presence and avoid common falsey string values
             const isAuth = !!token && token !== "null" && token !== "undefined" && token !== "";
 
-            console.log("[AuthGuard] Checking auth...", { pathname, normalizedPath, isAuth, isPublicRoute });
+
 
             setIsAuthenticated(isAuth);
 
             if (!isAuth && !isPublicRoute) {
-                console.log("[AuthGuard] Not authenticated on protected route, redirecting to /login");
+
                 router.replace("/login");
             } else if (isAuth && isPublicRoute) {
-                console.log("[AuthGuard] Authenticated on public route, redirecting to /");
+
                 router.replace("/");
             }
         };

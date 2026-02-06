@@ -65,7 +65,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                     setConversations(data);
                 }
             } catch (err) {
-                console.error("Failed to fetch conversations", err);
+                // Silently fail or handle gracefully without console error
             }
         };
         fetchConversations();

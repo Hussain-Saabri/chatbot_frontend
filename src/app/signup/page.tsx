@@ -39,9 +39,8 @@ export default function SignupPage() {
             } else {
                 setError(data.error || 'Signup failed. Please try again.');
             }
-        } catch (err) {
-            setError('Could not connect to the server. Is the backend running?');
-            console.error('Signup error:', err);
+        } catch (err: any) {
+            setError(err.message || 'An error occurred during signup');
         } finally {
             setIsLoading(false);
         }

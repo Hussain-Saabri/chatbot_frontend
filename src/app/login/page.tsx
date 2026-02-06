@@ -45,7 +45,6 @@ export default function LoginPage() {
             }
         } catch (err) {
             setError('Could not connect to the server. Is the backend running?');
-            console.error('Login error:', err);
         } finally {
             setIsLoading(false);
         }
@@ -127,7 +126,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="form-options">
-                            
+
                         </div>
 
                         <button type="submit" className="auth-btn" disabled={isLoading}>

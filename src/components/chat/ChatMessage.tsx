@@ -20,8 +20,20 @@ const ChatMessage = React.memo(({ content, sender, timestamp, isStreaming }: Cha
             <div className="flex flex-col gap-1">
                 <div className="markdown-content font-medium leading-relaxed">
                     {sender === "ai" ? (
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {content + (isStreaming ? " ●" : "")}
+                        <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                                p: ({ children }) => (
+                                    <p className="mb-4 last:mb-0 inline-block w-full">
+                                        {children}
+                                        {isStreaming && content.endsWith(children?.toString() || "") && (
+                                            <span className="streaming-indicator-dot ml-1">●</span>
+                                        )}
+                                    </p>
+                                ),
+                            }}
+                        >
+                            {content}
                         </ReactMarkdown>
                     ) : (
                         <p>{content}</p>

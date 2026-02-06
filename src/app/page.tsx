@@ -48,99 +48,77 @@ export default function Home() {
       }
     }
   }, [messages, isSwitchingChat, streamingMessageId]);
+  const streamAIResponse = async (response: Response, aiMsgId: string) => {
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let fullText = "";
 
-  const handleSendMessage = async (content: string) => {
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      sender: "user",
-      content,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
 
-    setMessages((prev) => [...prev, userMessage]);
-    setIsTyping(true);
+      const chunk = decoder.decode(value, { stream: true });
 
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${API}/api/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          content,
-          conversationId: conversationId
-        })
-      });
+      fullText += chunk;
 
-      if (response.status === 401) {
-        localStorage.removeItem("token");
-        router.push("/login");
-        return;
-      }
-
-      if (!response.ok) throw new Error("Failed to get response");
-
-      const headerConvId = response.headers.get("x-conversation-id");
-      if (headerConvId && !conversationId) {
-        setConversationId(headerConvId);
-      }
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-
-      if (!reader) {
-        setIsTyping(false);
-        return;
-      }
-
-      const aiMsgId = "ai-" + Date.now();
-      setStreamingMessageId(aiMsgId);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: aiMsgId,
-          sender: "ai",
-          content: "",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ]);
-
-      let accumulatedContent = "";
-      let isFirstChunk = true;
-
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (isFirstChunk) {
-          setIsTyping(false);
-          isFirstChunk = false;
-        }
-
-        if (done) {
-          break;
-        }
-
-        const chunk = decoder.decode(value, { stream: true });
-        console.log("Streaming chunk:", chunk);
-        accumulatedContent += chunk;
-
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === aiMsgId ? { ...msg, content: accumulatedContent } : msg
-          )
-        );
-      }
-
-      console.log("Full AI Response:", accumulatedContent);
-      setStreamingMessageId(null);
-    } catch (error) {
-      console.error("Chat error:", error);
-      setIsTyping(false);
-      setStreamingMessageId(null);
+      setMessages(prev =>
+        prev.map(m =>
+          m.id === aiMsgId ? { ...m, content: fullText } : m
+        )
+      );
     }
   };
+
+  const handleSendMessage = async (content: string) => {
+
+    // 1️⃣ Add user message first
+    setMessages(prev => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        sender: "user",
+        content,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }
+    ]);
+
+    setIsTyping(true);
+
+    // 2️⃣ Call backend
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API}/api/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ content, conversationId })
+    });
+
+    if (!response.ok) throw new Error("AI failed");
+
+    // 3️⃣ Insert your AI message block HERE 👇
+
+    const aiMsgId = "ai-" + Date.now();
+
+    setMessages(prev => [
+      ...prev,
+      {
+        id: aiMsgId,
+        sender: "ai",
+        content: "",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }
+    ]);
+
+    setStreamingMessageId(aiMsgId);
+    setIsTyping(false);
+
+    await streamAIResponse(response, aiMsgId);
+
+    setStreamingMessageId(null);
+  };
+
 
   const handleConversationSelect = async (id: string) => {
     if (id === "new") {
@@ -176,7 +154,7 @@ export default function Home() {
         scrollToBottom("auto");
       }
     } catch (err) {
-      console.error("Failed to load conversation", err);
+      // Silence error log
     } finally {
       // Small artificial delay for smooth transition feel
       setTimeout(() => {
