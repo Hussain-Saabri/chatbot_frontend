@@ -51,22 +51,54 @@ export default function Home() {
   const streamAIResponse = async (response: Response, aiMsgId: string) => {
     const reader = response.body!.getReader();
     const decoder = new TextDecoder();
-    let fullText = "";
+    let accumulatedText = "";
+    let displayedText = "";
+    let isStreamDone = false;
 
+    // Helper to add characters to the UI one by one
+    const typeCharacter = async () => {
+      while (!isStreamDone || displayedText.length < accumulatedText.length) {
+        if (displayedText.length < accumulatedText.length) {
+          // Determine typing speed: speed up if we are falling behind
+          const remaining = accumulatedText.length - displayedText.length;
+          const delay = remaining > 100 ? 5 : (remaining > 20 ? 15 : 30);
+
+          displayedText += accumulatedText[displayedText.length];
+
+          setMessages(prev => {
+            const lastMsg = prev[prev.length - 1];
+            if (lastMsg && lastMsg.id === aiMsgId) {
+              const updated = [...prev];
+              updated[updated.length - 1] = { ...lastMsg, content: displayedText };
+              return updated;
+            }
+            return prev;
+          });
+
+          await new Promise(resolve => setTimeout(resolve, delay));
+        } else {
+          // Wait for more data to arrive
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+      }
+    };
+
+    // Start the typing animation loop in parallel
+    const typingPromise = typeCharacter();
+
+    // Read characters from the stream
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) {
+        isStreamDone = true;
+        break;
+      }
 
       const chunk = decoder.decode(value, { stream: true });
-
-      fullText += chunk;
-
-      setMessages(prev =>
-        prev.map(m =>
-          m.id === aiMsgId ? { ...m, content: fullText } : m
-        )
-      );
+      accumulatedText += chunk;
     }
+
+    await typingPromise;
   };
 
   const handleSendMessage = async (content: string) => {
