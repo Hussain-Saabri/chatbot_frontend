@@ -26,7 +26,7 @@ export default function InputBar({ onSendMessage }: InputBarProps) {
                 <input
                     type="text"
                     className="chat-input"
-                    placeholder="Describe your symptoms or ask a medical question..."
+                    placeholder="Ask anything about your health..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onFocus={() => setIsFocused(true)}

@@ -542,37 +542,6 @@
     align-self: flex-start;
 }
 
-.dot {
-    width: 6px;
-    height: 6px;
-    background: var(--text-dim);
-    border-radius: 50%;
-    animation: bounce 1.4s infinite ease-in-out both;
-}
-
-.dot:nth-child(1) {
-    animation-delay: -0.32s;
-}
-
-.dot:nth-child(2) {
-    animation-delay: -0.16s;
-}
-
-@keyframes bounce {
-
-    0%,
-    80%,
-    100% {
-        transform: scale(0);
-        opacity: 0.3;
-    }
-
-    40% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
 [data-theme='dark'] .bubble-ai {
     background: #1e242d;
     border-color: #2b333f;
@@ -713,8 +682,8 @@
     }
 
     .input-container {
-        padding: 8px 12px;
-        gap: 10px;
+        padding: 8px 10px;
+        gap: 8px;
     }
 
     .chat-input {

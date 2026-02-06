@@ -8,7 +8,8 @@ import { ShieldCheck, MessageSquare, MapPin, Activity } from "lucide-react";
 import { useLayout } from "@/components/layout/LayoutContext";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Logo from "@/components/common/Logo";
+import Link from "next/link";
+import TypingIndicator from "@/components/chat/TypingIndicator";
 import { useRouter } from "next/navigation";
 
 interface Message {
@@ -88,9 +89,9 @@ export default function Home() {
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
-      setIsTyping(false);
 
       if (!reader) {
+        setIsTyping(false);
         return;
       }
 
@@ -107,9 +108,16 @@ export default function Home() {
       ]);
 
       let accumulatedContent = "";
+      let isFirstChunk = true;
 
       while (true) {
         const { done, value } = await reader.read();
+
+        if (isFirstChunk) {
+          setIsTyping(false);
+          isFirstChunk = false;
+        }
+
         if (done) {
           break;
         }
@@ -217,15 +225,7 @@ export default function Home() {
                     />
                   ))}
 
-                  {isTyping && (
-                    <div className="bubble bubble-ai typing-indicator chat-fade-in">
-                      <div className="flex gap-1.5 pt-1 pb-1 px-1">
-                        <span className="dot"></span>
-                        <span className="dot"></span>
-                        <span className="dot"></span>
-                      </div>
-                    </div>
-                  )}
+                  {isTyping && <TypingIndicator />}
 
                   {/* 👇 THIS IS THE IMPORTANT PART */}
                   <div ref={messagesEndRef} />
