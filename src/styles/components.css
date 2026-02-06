@@ -170,14 +170,17 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-height: 0;
+    /* Important for flex-shrink behavior */
 }
 
 .chat-messages {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: column;
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     width: 100%;
 }
 
@@ -573,10 +576,10 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 4rem 1.5rem;
-    height: 100%;
+    padding: 2rem 1.5rem;
+    flex: 1;
     max-width: 600px;
-    margin: 0 auto;
+    margin: auto;
 }
 
 .landing-icon-wrapper {
@@ -798,7 +801,6 @@
 /* App container */
 .app-container {
     display: flex;
-    height: 100vh;
     width: 100vw;
     position: relative;
     overflow: hidden;
