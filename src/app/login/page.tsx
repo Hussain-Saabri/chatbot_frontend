@@ -36,7 +36,7 @@ export default function LoginPage() {
                 localStorage.setItem('token', data.token); // Token save ho gaya
             }
             if (response.ok) {
-                toast.success('User logged in successfully!');
+                toast.success('Logged in successfully!');
                 setTimeout(() => {
                     router.push("/");
                 }, 1000);
