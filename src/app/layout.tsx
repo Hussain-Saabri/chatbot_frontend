@@ -14,6 +14,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Nura AI | Next-Gen AI Healthcare",
   description: "Futuristic, vibrant AI medical chatbot interface.",
+  icons: {
+    icon: "/logo-icon.png",
+  },
 };
 
 import AuthGuard from "@/components/auth/AuthGuard";

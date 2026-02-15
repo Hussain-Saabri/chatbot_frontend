@@ -129,6 +129,12 @@ export default function Home() {
 
     if (!response.ok) throw new Error("AI failed");
 
+    // 2.5️⃣ Update conversationId from header if this is a new chat
+    const newConvId = response.headers.get("x-conversation-id");
+    if (newConvId && !conversationId) {
+      setConversationId(newConvId);
+    }
+
     // 3️⃣ Insert your AI message block HERE 👇
 
     const aiMsgId = "ai-" + Date.now();
