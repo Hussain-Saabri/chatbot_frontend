@@ -90,6 +90,15 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                 >
                     <Menu size={20} />
                 </button>
+
+                {/* Mobile close button - only visible when expanded on mobile */}
+                <button
+                    className="sidebar-close-btn"
+                    onClick={closeSidebar}
+                    aria-label="Close sidebar"
+                >
+                    <X size={20} />
+                </button>
             </div>
 
             <nav className="nav-list custom-scroll">

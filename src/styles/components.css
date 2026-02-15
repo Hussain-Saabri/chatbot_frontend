@@ -8,9 +8,10 @@
     flex-direction: column;
     padding: 0 0.75rem 2rem;
     flex-shrink: 0;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-x: hidden;
     overflow-y: hidden;
+    min-height: 0;
 }
 
 .sidebar.collapsed {
@@ -38,6 +39,8 @@
     border: none;
     cursor: pointer;
     transition: var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 .sidebar-toggle-btn:hover {
@@ -54,6 +57,8 @@
     overflow-x: hidden;
     padding-right: 4px;
     /* Space for scrollbar */
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 .nav-link {
@@ -71,23 +76,29 @@
     white-space: nowrap;
 }
 
-.sidebar.collapsed .nav-list {
-    display: none;
+@media (min-width: 1025px) {
+    .sidebar.collapsed .nav-list {
+        display: none;
+    }
 }
 
-.sidebar.collapsed .mt-auto {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: auto;
-    gap: 12px;
+@media (min-width: 1025px) {
+    .sidebar.collapsed .mt-auto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: auto;
+        gap: 12px;
+    }
 }
 
-.sidebar.collapsed .nav-link {
-    justify-content: center;
-    padding: 12px 0;
-    width: 100%;
-    border-left: none !important;
+@media (min-width: 1025px) {
+    .sidebar.collapsed .nav-link {
+        justify-content: center;
+        padding: 12px 0;
+        width: 100%;
+        border-left: none !important;
+    }
 }
 
 .nav-link:hover {
@@ -103,11 +114,17 @@
 
 .sidebar-close-btn {
     display: none;
-    padding: 6px;
-    border-radius: 8px;
+    padding: 8px;
+    border-radius: 10px;
     color: var(--text-muted);
+    background: var(--bg-app);
+    border: 1px solid var(--sidebar-border);
     cursor: pointer;
-    transition: var(--transition);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .sidebar-close-btn:hover {
@@ -120,6 +137,7 @@
         width: 280px;
         padding: 1.5rem 1rem 3rem;
         /* Extra bottom padding for mobile settings visibility */
+        border-right: 1px solid var(--sidebar-border);
     }
 
     .sidebar-logo {
@@ -131,12 +149,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(--bg-app);
-        border: 1px solid var(--sidebar-border);
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
+        width: 38px;
+        height: 38px;
         box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar.expanded .sidebar-close-btn {
+        opacity: 1;
+        pointer-events: auto;
     }
 }
 
@@ -152,8 +172,8 @@
     background: #ffffff;
     position: sticky;
     top: 0;
-    z-index: 30;
-    box-shadow: none;
+    z-index: 50;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 [data-theme='dark'] .chat-header {
@@ -165,6 +185,8 @@
     .chat-header {
         height: 64px;
         padding: 0 1rem;
+        background: var(--bg-surface);
+        z-index: 60;
     }
 }
 
@@ -230,6 +252,8 @@
     border: none;
     cursor: pointer;
     transition: var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 @media (max-width: 1024px) {
@@ -242,6 +266,12 @@
 .mobile-menu-btn:hover {
     background: var(--primary-soft);
     color: var(--primary);
+}
+
+.sidebar-close-btn:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+    border-color: var(--primary);
 }
 
 .chat-area {
@@ -261,6 +291,8 @@
     flex-direction: column;
     padding: 1rem 0;
     width: 100%;
+    min-height: 0;
+    overscroll-behavior-y: contain;
 }
 
 .messages-list {
@@ -273,10 +305,10 @@
 .chat-content-wrapper {
     display: flex;
     flex-direction: column;
-    flex: 1;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
+    min-height: 100%;
 }
 
 /* Mobile Adjustments */

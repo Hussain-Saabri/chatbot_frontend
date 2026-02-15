@@ -62,9 +62,11 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+  height: 100vh;
   height: 100dvh;
-  /* Use dvh to account for browser UI, but min-height for flexibility */
+  /* Use dvh to account for browser UI */
   min-height: -webkit-fill-available;
+  overscroll-behavior: none;
 }
 
 /* SaaS Component Utilities */
@@ -92,12 +94,14 @@ body {
 /* Layout Grid System */
 .app-layout {
   display: flex;
+  height: 100vh;
   height: 100dvh;
   height: -webkit-fill-available;
   width: 100vw;
   position: relative;
   overflow: hidden;
   background-color: var(--bg-app);
+  overscroll-behavior: none;
 }
 
 .main-view {
@@ -105,6 +109,7 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   background: var(--bg-surface);
   position: relative;
 }
@@ -113,28 +118,27 @@ body {
 @media (max-width: 1024px) {
   .sidebar {
     position: fixed;
-    left: -280px;
+    left: 0;
     top: 0;
     z-index: 100;
     width: 280px !important;
+    height: 100vh;
     height: 100dvh;
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
   }
 
   .sidebar.expanded {
-    transform: translateX(280px);
+    transform: translateX(0);
   }
 
-  /* Force vertical centering for mobile toggle if needed, or keep it hidden */
-  .sidebar-close-btn {
-    display: none;
-  }
-
+  /* Ensure sidebar translates off-screen when not expanded */
   .sidebar.collapsed {
     width: 280px;
     /* Keep mobile width fixed */
-    transform: translateX(0);
+    transform: translateX(-100%);
   }
 
   .sidebar-overlay {
