@@ -8,10 +8,10 @@ import {
     Sun,
     X,
     MessageSquare,
-    LogOut
+    LogOut,
+    Menu
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import Logo from "@/components/common/Logo";
 import { useTheme } from "@/components/ThemeContext";
 import { useLayout } from "./LayoutContext";
 import { useRouter } from "next/navigation";
@@ -81,16 +81,14 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
     };
 
     return (
-        <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
-            <div className="sidebar-logo flex items-center justify-between">
-                <div className="flex items-center">
-                    <Logo size="md" />
-                </div>
+        <aside className={`sidebar ${isSidebarOpen ? "expanded" : "collapsed"}`}>
+            <div className="sidebar-logo flex items-center">
                 <button
-                    className="sidebar-close-btn"
-                    onClick={closeSidebar}
+                    className="sidebar-toggle-btn"
+                    onClick={toggleSidebar}
+                    title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
                 >
-                    <X size={20} />
+                    <Menu size={20} />
                 </button>
             </div>
 
@@ -99,8 +97,8 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                     className={`nav-link ${!currentId ? "active" : ""}`}
                     onClick={() => handleNavClick("new")}
                 >
-                    <Plus size={20} strokeWidth={2} />
-                    <span>New Chat</span>
+                    {isSidebarOpen && <Plus size={20} strokeWidth={2} />}
+                    {isSidebarOpen && <span>New Chat</span>}
                 </div>
 
                 {conversations.map((conv) => (
@@ -109,18 +107,18 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                         className={`nav-link ${currentId === conv.id ? "active" : ""}`}
                         onClick={() => handleNavClick(conv.id)}
                     >
-                        <MessageSquare size={18} strokeWidth={2} className="text-text-dim" />
-                        <span className="truncate">{conv.title || "Untitled Chat"}</span>
+                        {isSidebarOpen && <MessageSquare size={18} strokeWidth={2} className="text-text-dim" />}
+                        {isSidebarOpen && <span className="truncate">{conv.title || "Untitled Chat"}</span>}
                     </div>
                 ))}
             </nav>
 
             <div className="mt-auto pt-2 flex flex-col gap-1">
-                <hr className="sidebar-divider" />
+                {isSidebarOpen && <hr className="sidebar-divider" />}
 
                 <div className="nav-link" onClick={toggleTheme}>
                     {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-                    <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+                    {isSidebarOpen && <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>}
                 </div>
 
                 <div className="settings-container" ref={settingsRef}>
@@ -129,7 +127,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                         onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                     >
                         <Settings size={20} />
-                        <span>Settings</span>
+                        {isSidebarOpen && <span>Settings</span>}
                     </div>
 
                     {isSettingsOpen && (

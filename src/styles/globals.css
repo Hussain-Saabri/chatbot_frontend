@@ -3,6 +3,7 @@
   --bg-app: #fcfcfc;
   --bg-surface: #ffffff;
   --bg-sidebar: #ffffff;
+  --bg-surface-hover: #f8fafc;
   --sidebar-border: #f2f2f2;
   --divider: #f2f2f2;
 
@@ -37,6 +38,7 @@
   --bg-app: #0c0e12;
   --bg-surface: #15181e;
   --bg-sidebar: #15181e;
+  --bg-surface-hover: #1e242d;
   --sidebar-border: #1f242d;
   --divider: #1f242d;
 
@@ -114,15 +116,25 @@ body {
     left: -280px;
     top: 0;
     z-index: 100;
-    width: 280px;
+    width: 280px !important;
     height: 100dvh;
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .sidebar.open {
+  .sidebar.expanded {
     transform: translateX(280px);
-    /* Translate from -280px to 0 relative to parent? No, left is -280px. */
+  }
+
+  /* Force vertical centering for mobile toggle if needed, or keep it hidden */
+  .sidebar-close-btn {
+    display: none;
+  }
+
+  .sidebar.collapsed {
+    width: 280px;
+    /* Keep mobile width fixed */
+    transform: translateX(0);
   }
 
   .sidebar-overlay {
@@ -186,7 +198,7 @@ body {
   background: transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
+.custom-scroll::-webkit-scrollbar-thumb {
   background: var(--sidebar-border);
   border-radius: 3px;
 }

@@ -12,10 +12,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Nura AI | Next-Gen AI Healthcare",
+  title: "NuraAI",
   description: "Futuristic, vibrant AI medical chatbot interface.",
   icons: {
-    icon: "/logo-icon.png",
+    icon: "/logo-icon.svg",
+    apple: "/logo-icon.svg",
   },
 };
 
