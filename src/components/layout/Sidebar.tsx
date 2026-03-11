@@ -110,7 +110,16 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                 if (currentId === id) {
                     handleNavClick("new");
                 }
-                toast.success("Conversation deleted successfully");
+                
+                toast.success("Conversation deleted successfully", {
+                    className: "premium-toast success",
+                    duration: 3000
+                });
+
+                // Close sidebar on mobile after deletion
+                if (window.innerWidth <= 1024) {
+                    closeSidebar();
+                }
             } else {
                 toast.error("Failed to delete conversation");
             }
@@ -155,7 +164,8 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
     };
 
     return (
-        <aside className={`sidebar ${isSidebarOpen ? "expanded" : "collapsed"}`}>
+        <>
+            <aside className={`sidebar ${isSidebarOpen ? "expanded" : "collapsed"}`}>
             <div className="sidebar-logo flex items-center">
                 <button
                     className="sidebar-toggle-btn"
@@ -274,17 +284,18 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                     )}
                 </div>
             </div>
-
-            <Modal 
-                isOpen={!!deleteModalId}
-                onClose={() => setDeleteModalId(null)}
-                onConfirm={() => deleteModalId && handleDeleteConversation(deleteModalId)}
-                title="Delete Conversation"
-                message="Are you sure you want to delete this conversation? This action cannot be undone."
-                confirmText="Delete"
-                cancelText="Keep Chat"
-                type="danger"
-            />
         </aside>
+
+        <Modal 
+            isOpen={!!deleteModalId}
+            onClose={() => setDeleteModalId(null)}
+            onConfirm={() => deleteModalId && handleDeleteConversation(deleteModalId)}
+            title="Delete Conversation"
+            message="Are you sure you want to delete this conversation? This action cannot be undone."
+            confirmText="Delete"
+            cancelText="Keep Chat"
+            type="danger"
+        />
+        </>
     );
 }

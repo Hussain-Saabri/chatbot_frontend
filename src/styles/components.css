@@ -1,3 +1,27 @@
+/* Premium Toast Styles */
+.premium-toast {
+    border-radius: 16px !important;
+    padding: 12px 16px !important;
+    font-family: inherit !important;
+    font-size: 0.9375rem !important;
+    font-weight: 500 !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(10px);
+}
+
+.premium-toast.success {
+    background: #ecfdf5 !important;
+    color: #065f46 !important;
+    border-color: #a7f3d0 !important;
+}
+
+[data-theme='dark'] .premium-toast.success {
+    background: rgba(6, 95, 70, 0.2) !important;
+    color: #34d399 !important;
+    border-color: rgba(52, 211, 153, 0.2) !important;
+}
+
 /* Premium Healthcare Sidebar */
 .sidebar {
     width: 280px;
@@ -576,7 +600,7 @@
     border-radius: 12px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.04);
     padding: 8px;
-    z-index: 15000; /* Higher than sidebar, lower than overlay */
+    z-index: 10000; /* Sidebar is 100, overlay is 20000 */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 }
@@ -615,19 +639,19 @@
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(8px);
-    z-index: 20000; /* Higher than sidebar and action menu */
+    z-index: 20000;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.25rem;
+    padding: 1rem;
     animation: fadeIn 0.2s ease-out forwards;
 }
 
 .modal-container {
     background: var(--bg-surface);
-    width: 100%;
+    width: 90%;
     max-width: 440px;
     border-radius: 28px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -636,20 +660,35 @@
     overflow: hidden;
     position: relative;
     transform-origin: center;
+    animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes modalScaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @media (max-width: 640px) {
     .modal-container {
         padding: 24px;
         border-radius: 24px;
+        width: 92%;
     }
     
     .modal-footer {
-        flex-direction: column-reverse;
+        flex-direction: column-reverse; /* Reverses order: Red Delete on top */
+        gap: 8px;
     }
     
     .modal-footer button {
         width: 100%;
+        min-height: 48px; /* Easier for thumb on mobile */
     }
 }
 
