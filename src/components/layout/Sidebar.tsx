@@ -32,7 +32,10 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const [deleteModalId, setDeleteModalId] = useState<string | null>(null);
+    const [renameModalId, setRenameModalId] = useState<string | null>(null);
+    const [renameTitle, setRenameTitle] = useState("");
     const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+    
     const navRef = useRef<HTMLElement>(null);
     const settingsRef = useRef<HTMLDivElement>(null);
     const { theme, toggleTheme } = useTheme();
@@ -64,6 +67,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
 
     const handleMenuClick = (e: React.MouseEvent, id: string) => {
         e.stopPropagation();
+        
         if (activeMenuId === id) {
             setActiveMenuId(null);
         } else {
@@ -96,6 +100,40 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
         }
         return () => nav?.removeEventListener("scroll", handleScroll);
     }, [activeMenuId]);
+
+    const handleRenameConversation = async () => {
+        if (!renameModalId || !renameTitle.trim()) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API}/api/chat/conversations/${renameModalId}`, {
+                method: "PATCH",
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ title: renameTitle.trim() })
+            });
+
+            if (res.ok) {
+                const updated = await res.json();
+                setConversations(prev => prev.map(c => c.id === renameModalId ? { ...c, title: updated.title } : c));
+                
+                toast.success("Conversation renamed successfully", {
+                    className: "premium-toast success",
+                    duration: 3000
+                });
+            } else {
+                toast.error("Failed to rename conversation");
+            }
+        } catch (err) {
+            toast.error("An error occurred while renaming");
+        } finally {
+            setRenameModalId(null);
+            setRenameTitle("");
+            setActiveMenuId(null);
+        }
+    };
 
     const handleDeleteConversation = async (id: string) => {
         try {
@@ -166,34 +204,36 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
     return (
         <>
             <aside className={`sidebar ${isSidebarOpen ? "expanded" : "collapsed"}`}>
-            <div className="sidebar-logo flex items-center">
+            <div className="sidebar-header">
                 <button
-                    className="sidebar-toggle-btn"
+                    className="sidebar-toggle-btn lg-visible"
                     onClick={toggleSidebar}
                     title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
                 >
                     <Menu size={20} />
                 </button>
-
-                {/* Mobile close button - only visible when expanded on mobile */}
-                <button
-                    className="sidebar-close-btn"
-                    onClick={closeSidebar}
-                    aria-label="Close sidebar"
-                >
-                    <X size={20} />
-                </button>
+                
+                {isSidebarOpen && (
+                    <button
+                        className="sidebar-close-btn mobile-visible"
+                        onClick={closeSidebar}
+                        aria-label="Close sidebar"
+                    >
+                        <X size={20} />
+                    </button>
+                )}
             </div>
 
             <nav className="nav-list custom-scroll" ref={navRef}>
-                <div
-                    className={`nav-link ${!currentId ? "active" : ""}`}
-                    onClick={() => handleNavClick("new")}
-                >
-                    <Plus size={20} strokeWidth={2} />
-                    <span className="sidebar-text">New Chat</span>
+                <div className="px-2 mb-2">
+                    <button
+                        className={`btn-new-chat ${!currentId ? "active" : ""}`}
+                        onClick={() => handleNavClick("new")}
+                    >
+                        <Plus size={20} strokeWidth={2} />
+                        <span className="sidebar-text font-medium">New Chat</span>
+                    </button>
                 </div>
-
                 {conversations.map((conv) => (
                     <div
                         key={conv.id}
@@ -233,7 +273,15 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                 >
                     <button
                         className="menu-action-item"
-                        onClick={(e) => { e.stopPropagation(); setActiveMenuId(null); }}
+                        onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const conv = conversations.find(c => c.id === activeMenuId);
+                            if (conv) {
+                                setRenameTitle(conv.title || "Untitled Chat");
+                                setRenameModalId(activeMenuId);
+                            }
+                            setActiveMenuId(null); 
+                        }}
                     >
                         <Edit2 size={14} /> Rename
                     </button>
@@ -285,6 +333,33 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                 </div>
             </div>
         </aside>
+
+        <Modal 
+            isOpen={!!renameModalId}
+            onClose={() => {
+                setRenameModalId(null);
+                setRenameTitle("");
+            }}
+            onConfirm={handleRenameConversation}
+            title="Rename Conversation"
+            confirmText="Rename"
+            cancelText="Cancel"
+            type="default"
+        >
+            <div className="mt-4 premium-input-container">
+                <input
+                    type="text"
+                    className="premium-input"
+                    placeholder="Enter new title..."
+                    value={renameTitle}
+                    onChange={(e) => setRenameTitle(e.target.value)}
+                    autoFocus
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") handleRenameConversation();
+                    }}
+                />
+            </div>
+        </Modal>
 
         <Modal 
             isOpen={!!deleteModalId}

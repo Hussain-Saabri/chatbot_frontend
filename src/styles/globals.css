@@ -132,7 +132,7 @@ body {
     left: 0;
     top: 0;
     z-index: 100;
-    width: 280px !important;
+    width: 240px !important;
     height: 100vh;
     height: 100dvh;
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
@@ -147,7 +147,7 @@ body {
 
   /* Ensure sidebar translates off-screen when not expanded */
   .sidebar.collapsed {
-    width: 280px;
+    width: 240px;
     /* Keep mobile width fixed */
     transform: translateX(-100%);
   }

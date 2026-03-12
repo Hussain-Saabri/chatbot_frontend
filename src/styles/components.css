@@ -22,9 +22,181 @@
     border-color: rgba(52, 211, 153, 0.2) !important;
 }
 
+/* Bulk Selection System */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 0.75rem 0.5rem;
+    min-height: 56px;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.btn-icon-mode {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-dim);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-icon-mode:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-main);
+}
+
+.btn-icon-mode.active {
+    background: var(--primary-soft);
+    color: var(--primary);
+}
+
+.sidebar-close-btn {
+    width: 38px;
+    height: 38px;
+    display: none; /* Desktop */
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: var(--text-dim);
+    transition: all 0.2s ease;
+}
+
+@media (max-width: 1024px) {
+    .sidebar-close-btn {
+        display: flex;
+    }
+}
+
+.sidebar-close-btn:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-main);
+}
+
+.selection-mode .nav-item-wrapper {
+    padding-left: 0.5rem;
+}
+
+.selection-mode .nav-item-wrapper.selected {
+    background: var(--primary-soft);
+    border-color: var(--primary-border);
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-toggle-btn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: var(--text-dim);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sidebar-toggle-btn:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-main);
+}
+
+.lg-visible {
+    display: flex;
+}
+
+.mobile-visible {
+    display: none;
+}
+
+.bulk-action-bar {
+    position: absolute;
+    bottom: 24px;
+    left: 12px;
+    right: 12px;
+    padding: 12px 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+    animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.selection-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.count-badge {
+    background: var(--primary);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+.btn-bulk-delete {
+    background: #fee2e2;
+    color: #ef4444;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.btn-bulk-delete:hover {
+    background: #fecaca;
+    transform: translateY(-1px);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Premium Healthcare Sidebar */
 .sidebar {
-    width: 280px;
+    width: 240px;
     height: 100dvh;
     background: var(--bg-sidebar);
     border-right: 1px solid var(--sidebar-border);
@@ -158,7 +330,7 @@
 
 @media (max-width: 1024px) {
     .sidebar {
-        width: 280px;
+        width: 240px;
         padding: 1.5rem 1rem 3rem;
         /* Extra bottom padding for mobile settings visibility */
         border-right: 1px solid var(--sidebar-border);
@@ -176,6 +348,15 @@
         width: 38px;
         height: 38px;
         box-shadow: var(--shadow-sm);
+        margin-left: auto; /* Push to right */
+    }
+
+    .lg-visible {
+        display: none !important;
+    }
+
+    .mobile-visible {
+        display: flex !important;
     }
 
     .sidebar.expanded .sidebar-close-btn {
@@ -731,6 +912,7 @@
     padding: 4px;
     border-radius: 50%;
     transition: var(--transition);
+    margin-left: auto;
 }
 
 .modal-close-btn:hover {
@@ -1268,4 +1450,84 @@
     position: relative;
     overflow: hidden;
     background-color: var(--bg-app);
+}
+
+/* Premium Input & Action Styles */
+.premium-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.premium-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--bg-app);
+    border: 1.5px solid var(--divider);
+    border-radius: 16px;
+    font-size: 1rem;
+    color: var(--text-main);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: inherit;
+}
+
+.premium-input:focus {
+    border-color: var(--primary);
+    background: var(--bg-surface);
+    box-shadow: 0 0 0 4px var(--primary-soft), 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.premium-input::placeholder {
+    color: var(--text-dim);
+    opacity: 0.7;
+}
+
+.btn-modal-confirm.default {
+    background: var(--primary);
+    color: white;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(43, 191, 144, 0.2);
+}
+
+.btn-modal-confirm.default:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 6px 18px rgba(43, 191, 144, 0.3);
+    transform: translateY(-1px);
+}
+
+/* New Chat Button - Minimal Design */
+.btn-new-chat {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: transparent;
+    color: var(--text-main);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.btn-new-chat:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+}
+
+.btn-new-chat.active {
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.sidebar.collapsed .btn-new-chat {
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.btn-new-chat .Plus {
+    flex-shrink: 0;
 }

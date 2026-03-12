@@ -8,10 +8,11 @@ interface ModalProps {
     onClose: () => void;
     onConfirm: () => void;
     title: string;
-    message: string;
+    message?: string;
     confirmText?: string;
     cancelText?: string;
     type?: "default" | "warning" | "danger";
+    children?: React.ReactNode;
 }
 
 export default function Modal({
@@ -22,7 +23,8 @@ export default function Modal({
     message,
     confirmText = "Confirm",
     cancelText = "Cancel",
-    type = "default"
+    type = "default",
+    children
 }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -54,13 +56,7 @@ export default function Modal({
         <div className="modal-overlay" onClick={handleBackdropClick}>
             <div className="modal-container menu-fade-in" ref={modalRef}>
                 <div className="modal-header">
-                    <div className={`modal-icon-wrapper ${type}`}>
-                        {type === "danger" || type === "warning" ? (
-                            <AlertTriangle size={24} />
-                        ) : (
-                            <Activity size={24} />
-                        )}
-                    </div>
+                    
                     <button className="modal-close-btn" onClick={onClose}>
                         <X size={20} />
                     </button>
@@ -68,7 +64,8 @@ export default function Modal({
 
                 <div className="modal-body">
                     <h3 className="modal-title">{title}</h3>
-                    <p className="modal-message">{message}</p>
+                    {message && <p className="modal-message">{message}</p>}
+                    {children}
                 </div>
 
                 <div className="modal-footer">
