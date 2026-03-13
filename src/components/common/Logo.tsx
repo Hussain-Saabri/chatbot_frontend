@@ -25,8 +25,8 @@ export default function Logo({
     };
 
     const currentSize = sizes[size];
-    const finalHeight = height || (width ? 'auto' : currentSize.height);
-    const finalWidth = width || 'auto';
+    const finalHeight = height || (width ? undefined : currentSize.height);
+    const finalWidth = width || undefined;
 
     if (iconOnly) {
         return (

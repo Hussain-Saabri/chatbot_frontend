@@ -11,7 +11,16 @@ interface LayoutContextType {
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    // Start with true for desktop-first feel, or false if you prefer mobile-first
+    // Here we initialize to true, but we'll refine it in useEffect to be responsive
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+    // Synchronize with screen size on mount
+    React.useEffect(() => {
+        if (window.innerWidth <= 1024) {
+            setIsSidebarOpen(false);
+        }
+    }, []);
 
     const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
     const closeSidebar = () => setIsSidebarOpen(false);

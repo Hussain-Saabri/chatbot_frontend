@@ -5,6 +5,8 @@ import { useParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Logo from "@/components/common/Logo";
+import Logo3D from "@/components/common/Logo3D";
+import LogoFull3D from "@/components/common/LogoFull3D";
 import Link from "next/link";
 import { 
     AlertCircle, 
@@ -44,6 +46,7 @@ export default function SharedConversationPage() {
     document.body.style.height = "auto";
 
     const fetchSharedConversation = async () => {
+      const startTime = Date.now();
       try {
         const res = await fetch(`${API}/api/chat/conversations/${id}`, {
           headers: { "Authorization": `Bearer ${token}` }
@@ -65,6 +68,11 @@ export default function SharedConversationPage() {
       } catch (err) {
         setError("Network error. Please try again later.");
       } finally {
+        const elapsedTime = Date.now() - startTime;
+        const minimumDelay = 2000; // 2 seconds
+        if (elapsedTime < minimumDelay) {
+          await new Promise(resolve => setTimeout(resolve, minimumDelay - elapsedTime));
+        }
         setIsLoading(false);
       }
     };
@@ -84,10 +92,11 @@ export default function SharedConversationPage() {
   if (isLoading) {
     return (
         <div className="simple-page-wrapper loading-simple">
-            <div className="text-sm font-bold tracking-widest text-[var(--primary)] animate-pulse uppercase">Syncing Medical Log...</div>
-        </div>
+            <LogoFull3D width={400} />
+            </div>
     );
   }
+
 
   if (error || !conversation) {
     return (

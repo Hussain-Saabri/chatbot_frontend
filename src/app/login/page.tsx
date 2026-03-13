@@ -16,6 +16,7 @@ export default function LoginPage() {
     const [error, setError] = useState('');
     const API = process.env.NEXT_PUBLIC_API_URL;
     const handleSignIn = async (e: React.FormEvent) => {
+        
         e.preventDefault();
         setIsLoading(true);
         setError('');
@@ -34,12 +35,13 @@ export default function LoginPage() {
 
             if (data.token) {
                 localStorage.setItem('token', data.token); // Token save ho gaya
+                window.dispatchEvent(new Event('nura-auth-update')); // Notify AuthGuard immediately
             }
             if (response.ok) {
                 toast.success('Logged in successfully!');
                 setTimeout(() => {
                     router.push("/");
-                }, 1000);
+                }, 500);
             } else {
                 setError(data.error || 'Login failed. Please try again.');
             }

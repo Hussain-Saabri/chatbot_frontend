@@ -47,6 +47,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
     const API = process.env.NEXT_PUBLIC_API_URL;
     const handleLogout = () => {
         localStorage.removeItem("token");
+        window.dispatchEvent(new Event('nura-auth-update'));
         router.push("/login");
     };
 

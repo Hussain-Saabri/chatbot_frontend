@@ -2,6 +2,7 @@
 
 import { useEffect, useState, ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import LogoFull3D from "@/components/common/LogoFull3D";
 import "@/styles/auth-guard.css";
 
 interface AuthGuardProps {
@@ -10,57 +11,116 @@ interface AuthGuardProps {
 
 export default function AuthGuard({ children }: AuthGuardProps) {
     const router = useRouter();
-    const pathname = useRelativePathname();
+    const pathname = usePathname();
+    const [isMounted, setIsMounted] = useState(false);
+    
+    // Initialize splash state consistently for hydration
+    const [showSplash, setShowSplash] = useState(true);
+
+    // Synchronously check for token on initialization
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-    // Normalize pathname (remove trailing slash and handle null)
-    function useRelativePathname() {
-        const path = usePathname();
-        return (path || "").replace(/\/$/, "") || "/";
-    }
-
-    const normalizedPath = pathname === "" ? "/" : pathname;
+    // Normalize pathname
+    const normalizedPath = (pathname || "").replace(/\/$/, "") || "/";
     const isPublicRoute = normalizedPath === "/login" || normalizedPath === "/signup";
+    const isShareRoute = normalizedPath.startsWith("/share");
 
+    // 1. Hydration & Initial State Sync
     useEffect(() => {
+        setIsMounted(true);
+        
+        let timer: NodeJS.Timeout | null = null;
+
+        // Skip splash on share routes
+        if (isShareRoute) {
+            setShowSplash(false);
+        } else {
+            // Show splash timer (2 seconds) for other routes
+            timer = setTimeout(() => {
+                setShowSplash(false);
+            }, 2000);
+        }
+
         const checkAuth = () => {
             const token = localStorage.getItem("token");
-            // Check for presence and avoid common falsey string values
             const isAuth = !!token && token !== "null" && token !== "undefined" && token !== "";
-
-
-
             setIsAuthenticated(isAuth);
-
-            if (!isAuth && !isPublicRoute) {
-
-                router.replace("/login");
-            } else if (isAuth && isPublicRoute) {
-
-                router.replace("/");
-            }
         };
-
         checkAuth();
 
-        window.addEventListener("storage", checkAuth);
-        return () => window.removeEventListener("storage", checkAuth);
-    }, [pathname, router, isPublicRoute, normalizedPath]);
+        return () => {
+            if (timer) clearTimeout(timer);
+        };
+    }, [isShareRoute]);
 
-    // CRITICAL FIX: If we are on a public route, ALWAYS render children immediately.
-    // This prevents the infinite loader if pathname is slow to hydrate or if checkAuth takes a frame.
-    if (isPublicRoute) {
+    // 2. Authentication Sync (Events & Path changes)
+    useEffect(() => {
+        if (!isMounted) return;
+
+        const checkAuth = () => {
+            const token = localStorage.getItem("token");
+            const isAuth = !!token && token !== "null" && token !== "undefined" && token !== "";
+            setIsAuthenticated(isAuth);
+        };
+
+        // Listen for updates
+        window.addEventListener("storage", checkAuth);
+        window.addEventListener("nura-auth-update", checkAuth);
+        
+        return () => {
+            window.removeEventListener("storage", checkAuth);
+            window.removeEventListener("nura-auth-update", checkAuth);
+        };
+    }, [isMounted, pathname]);
+
+    // 3. Redirection Logic (Blocked by Splash)
+    useEffect(() => {
+        if (!isMounted || showSplash || isAuthenticated === null) return;
+
+        // Perform a synchronous check to ensure we don't redirect with stale state
+        const token = localStorage.getItem("token");
+        const currentAuth = !!token && token !== "null" && token !== "undefined" && token !== "";
+
+        if (!currentAuth && !isPublicRoute) {
+            router.replace("/login");
+        } else if (currentAuth && isPublicRoute) {
+            router.replace("/");
+        }
+    }, [isMounted, showSplash, isAuthenticated, isPublicRoute, router]);
+
+    // Prevent hydration mismatch: don't render until mounted
+    if (!isMounted) {
+        return (
+            <div className="auth-guard-loading bg-white">
+                <LogoFull3D width={400} />
+            </div>
+        );
+    }
+
+    // Stage 1: Initial Premium Splash (Once per session)
+    if (showSplash) {
+        return (
+            <div className="auth-guard-loading bg-white">
+                <LogoFull3D width={400} />
+            </div>
+        );
+    }
+
+    // Stage 2: Public/Share Route Bypass
+    // If we're on a public route or share route, just show it
+    if (isPublicRoute || isShareRoute) {
         return <>{children}</>;
     }
 
-    // Show loading splash while checking auth for protected routes
+    // Stage 3: Protected Route Loading
     if (isAuthenticated === null || isAuthenticated === false) {
         return (
-            <div className="auth-guard-loading">
+            <div className="auth-guard-loading bg-white">
                 <div className="auth-guard-spinner"></div>
             </div>
         );
     }
 
+    // Stage 4: Authorized Content or Valid Redirect Target
     return <>{children}</>;
 }
