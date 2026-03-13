@@ -153,7 +153,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                 }
                 
                 toast.success("Conversation deleted successfully", {
-                    className: "premium-toast success",
+                    className: "premium-toast error",
                     duration: 3000
                 });
 

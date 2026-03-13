@@ -22,6 +22,18 @@
     border-color: rgba(52, 211, 153, 0.2) !important;
 }
 
+.premium-toast.error {
+    background: #fef2f2 !important;
+    color: #991b1b !important;
+    border-color: #fecaca !important;
+}
+
+[data-theme='dark'] .premium-toast.error {
+    background: rgba(153, 27, 27, 0.2) !important;
+    color: #f87171 !important;
+    border-color: rgba(248, 113, 113, 0.2) !important;
+}
+
 /* Bulk Selection System */
 .sidebar-header {
     display: flex;

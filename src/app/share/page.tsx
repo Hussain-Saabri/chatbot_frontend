@@ -21,6 +21,7 @@ interface Conversation {
 }
 
 function SharedConversationContent() {
+  
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [conversation, setConversation] = useState<Conversation | null>(null);

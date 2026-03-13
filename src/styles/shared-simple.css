@@ -1,0 +1,184 @@
+/* Unified NuraAI Design System: Syncing with Root Layout */
+
+:root {
+  --bg-app: #fcfcfc;
+  --bg-surface: #ffffff;
+  --primary: #2bbf90;
+  --primary-soft: #f0faf7;
+  --primary-hover: #24a37a;
+  --sidebar-border: #f2f2f2;
+  --divider: #f2f2f2;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --radius-bubble: 24px;
+  --shadow-bubble: 0 4px 20px rgba(0, 0, 0, 0.03);
+  --medical-pattern-opacity: 0.15;
+}
+
+[data-theme='dark'] {
+  --bg-app: #0c0e12;
+  --bg-surface: #15181e;
+  --primary: #2bbf90;
+  --primary-soft: rgba(37, 185, 144, 0.1);
+  --sidebar-border: #1f242d;
+  --divider: #1f242d;
+  --text-main: #f1f3f4;
+  --text-muted: #9aa0a6;
+  --text-dim: #5f6368;
+}
+
+.simple-page-wrapper {
+  background-color: var(--bg-app);
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-main);
+  z-index: 1000;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Background Pattern overlaying the app background */
+.simple-page-wrapper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url('/images/medical-pattern.png');
+  background-size: 850px;
+  background-repeat: repeat;
+  opacity: var(--medical-pattern-opacity);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Sync with main app .chat-header */
+.simple-header {
+  height: 76px;
+  padding: 0 1.5rem; /* Edge padding */
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--divider);
+  display: flex;
+  justify-content: flex-start; /* Viewport-wide left align */
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.simple-header > a {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.simple-content-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+  position: relative;
+  z-index: 1;
+}
+
+.chat-bubble-node {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.user-node {
+  align-items: flex-end;
+}
+
+.ai-node {
+  align-items: flex-start;
+}
+
+.bubble-content {
+  max-width: 85%;
+  padding: 1.25rem 1.75rem;
+  border-radius: var(--radius-bubble);
+  line-height: 1.6;
+  font-size: 0.9375rem;
+  box-shadow: var(--shadow-bubble);
+  position: relative;
+}
+
+.user-node .bubble-content {
+  background-color: var(--primary);
+  color: #ffffff;
+  border-bottom-right-radius: 6px;
+}
+
+.ai-node .bubble-content {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--divider);
+  border-bottom-left-radius: 4px;
+}
+
+.bubble-timestamp {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+}
+
+.user-node .bubble-timestamp {
+  text-align: right;
+  opacity: 0.8;
+}
+
+.ai-node .bubble-timestamp {
+  text-align: left;
+  opacity: 0.6;
+}
+
+.bubble-content p {
+  margin-bottom: 1rem;
+}
+
+.bubble-content p:last-child {
+  margin-bottom: 0;
+}
+
+.loading-simple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.footer-simple {
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+@media (max-width: 1024px) {
+  .simple-header {
+    height: 64px;
+    padding: 0 1.25rem;
+    justify-content: flex-start; /* Mobile Left Align */
+  }
+
+  .simple-header > a {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .bubble-content {
+    max-width: 92%;
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
