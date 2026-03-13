@@ -26,7 +26,7 @@ export default function ShareModal({
     
     // Construct the share URL
     const shareUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}/share?id=${conversationId}`
+        ? `${window.location.origin}/share/${conversationId}`
         : '';
 
     const handleCopy = () => {

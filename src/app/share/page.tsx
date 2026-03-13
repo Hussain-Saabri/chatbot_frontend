@@ -47,7 +47,7 @@ function SharedConversationContent() {
 
     if (id) {
       fetchSharedConversation();
-    } else if (!id && typeof window !== 'undefined') {
+    } else if (!id) {
         setIsLoading(false);
         setError("No conversation ID provided.");
     }
@@ -55,9 +55,8 @@ function SharedConversationContent() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-        <div className="skeleton skeleton-message ai w-full max-w-2xl mb-4" />
-        <div className="skeleton skeleton-message user w-full max-w-2xl mb-4" />
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 text-primary">
+         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -74,7 +73,7 @@ function SharedConversationContent() {
         </p>
         <Link href="/" className="btn-primary px-6 py-3 rounded-xl font-medium flex items-center gap-2">
           <ArrowLeft size={20} />
-          Back to Chat
+          Back to AI Chat
         </Link>
       </div>
     );
@@ -87,13 +86,16 @@ function SharedConversationContent() {
             <div className="header-left">
                 <Logo width={130} />
             </div>
-            {/* Clear, minimal header as requested */}
+            <div className="flex items-center gap-2 text-text-dim text-xs">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <span>Shared Publicly</span>
+            </div>
         </header>
 
         <div className="chat-area">
           <div className="chat-messages custom-scroll">
-            <div className="chat-content-wrapper">
-              <div className="messages-list py-8">
+            <div className="chat-content-wrapper font-inter">
+              <div className="messages-list py-8 max-w-3xl mx-auto w-full">
                 {conversation.messages.map((msg) => (
                   <ChatMessage
                     key={msg.id}
@@ -111,11 +113,11 @@ function SharedConversationContent() {
   );
 }
 
-export default function SharedConversationPage() {
+export default function SharedPage() {
     return (
         <Suspense fallback={
-            <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-                <div className="skeleton skeleton-message ai w-full max-w-2xl" />
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
         }>
             <SharedConversationContent />
