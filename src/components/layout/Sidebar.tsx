@@ -21,6 +21,8 @@ import { useLayout } from "./LayoutContext";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Modal from "../common/Modal";
+import ShareModal from "../common/ShareModal";
+import Logo from "../common/Logo";
 
 interface SidebarProps {
     onConversationSelect?: (id: string) => void;
@@ -34,6 +36,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
     const [deleteModalId, setDeleteModalId] = useState<string | null>(null);
     const [renameModalId, setRenameModalId] = useState<string | null>(null);
     const [renameTitle, setRenameTitle] = useState("");
+    const [shareModalId, setShareModalId] = useState<string | null>(null);
     const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
     
     const navRef = useRef<HTMLElement>(null);
@@ -205,23 +208,27 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
         <>
             <aside className={`sidebar ${isSidebarOpen ? "expanded" : "collapsed"}`}>
             <div className="sidebar-header">
-                <button
-                    className="sidebar-toggle-btn lg-visible"
-                    onClick={toggleSidebar}
-                    title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-                >
-                    <Menu size={20} />
-                </button>
-                
-                {isSidebarOpen && (
+                <div className="sidebar-logo-container">
                     <button
-                        className="sidebar-close-btn mobile-visible"
-                        onClick={closeSidebar}
-                        aria-label="Close sidebar"
+                        className="sidebar-toggle-btn lg-visible"
+                        onClick={toggleSidebar}
+                        title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
                     >
-                        <X size={20} />
+                        <Menu size={20} />
                     </button>
-                )}
+                    
+                    <div className="mobile-visible logo-wrap">
+                        <Logo width={120} />
+                    </div>
+                </div>
+                
+                <button
+                    className="sidebar-close-btn mobile-visible"
+                    onClick={closeSidebar}
+                    aria-label="Close sidebar"
+                >
+                    <X size={20} />
+                </button>
             </div>
 
             <nav className="nav-list custom-scroll" ref={navRef}>
@@ -231,7 +238,7 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                         onClick={() => handleNavClick("new")}
                     >
                         <Plus size={20} strokeWidth={2} />
-                        <span className="sidebar-text font-medium">New Chat</span>
+                        <span className="sidebar-text text-[25px]">New Chat</span>
                     </button>
                 </div>
                 {conversations.map((conv) => (
@@ -287,7 +294,11 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
                     </button>
                     <button
                         className="menu-action-item"
-                        onClick={(e) => { e.stopPropagation(); setActiveMenuId(null); }}
+                        onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setShareModalId(activeMenuId);
+                            setActiveMenuId(null); 
+                        }}
                     >
                         <Share2 size={14} /> Share
                     </button>
@@ -370,6 +381,16 @@ export default function Sidebar({ onConversationSelect, currentId }: SidebarProp
             confirmText="Delete"
             cancelText="Keep Chat"
             type="danger"
+        />
+
+        <ShareModal 
+            isOpen={!!shareModalId}
+            onClose={() => setShareModalId(null)}
+            conversationId={shareModalId || ""}
+            isShared={conversations.find(c => c.id === shareModalId)?.isShared || false}
+            onShareToggle={(isShared) => {
+                setConversations(prev => prev.map(c => c.id === shareModalId ? { ...c, isShared } : c));
+            }}
         />
         </>
     );

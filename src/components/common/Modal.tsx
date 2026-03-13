@@ -13,6 +13,7 @@ interface ModalProps {
     cancelText?: string;
     type?: "default" | "warning" | "danger";
     children?: React.ReactNode;
+    showFooter?: boolean;
 }
 
 export default function Modal({
@@ -24,7 +25,8 @@ export default function Modal({
     confirmText = "Confirm",
     cancelText = "Cancel",
     type = "default",
-    children
+    children,
+    showFooter = true
 }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -68,20 +70,22 @@ export default function Modal({
                     {children}
                 </div>
 
-                <div className="modal-footer">
-                    <button className="btn-modal-cancel" onClick={onClose}>
-                        {cancelText}
-                    </button>
-                    <button 
-                        className={`btn-modal-confirm ${type}`} 
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onConfirm();
-                        }}
-                    >
-                        {confirmText}
-                    </button>
-                </div>
+                {showFooter && (
+                    <div className="modal-footer">
+                        <button className="btn-modal-cancel" onClick={onClose}>
+                            {cancelText}
+                        </button>
+                        <button 
+                            className={`btn-modal-confirm ${type}`} 
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onConfirm();
+                            }}
+                        >
+                            {confirmText}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
