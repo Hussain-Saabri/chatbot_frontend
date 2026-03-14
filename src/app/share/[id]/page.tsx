@@ -38,7 +38,7 @@ export default function SharedConversationPage() {
   const [error, setError] = useState<string | null>(null);
   const API = process.env.NEXT_PUBLIC_API_URL;
   const token = localStorage.getItem("token");
-
+ 
   useEffect(() => {
     // Override global overflow:hidden from RootLayout
     document.body.style.overflow = "auto";
@@ -47,10 +47,10 @@ export default function SharedConversationPage() {
 
     const fetchSharedConversation = async () => {
       const startTime = Date.now();
+     
       try {
-        const res = await fetch(`${API}/api/chat/conversations/${id}`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
+        const res = await fetch(`${API}/api/chat/shared/${id}`);
+        
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {

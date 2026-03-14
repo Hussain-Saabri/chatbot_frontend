@@ -22,7 +22,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 
     // Normalize pathname
     const normalizedPath = (pathname || "").replace(/\/$/, "") || "/";
-    const isPublicRoute = normalizedPath === "/login" || normalizedPath === "/signup";
+    const isPublicRoute = normalizedPath === "/login" || normalizedPath === "/signup" || normalizedPath === "/verify-otp";
     const isShareRoute = normalizedPath.startsWith("/share");
 
     // 1. Hydration & Initial State Sync
@@ -81,7 +81,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
         const token = localStorage.getItem("token");
         const currentAuth = !!token && token !== "null" && token !== "undefined" && token !== "";
 
-        if (!currentAuth && !isPublicRoute) {
+        if (!currentAuth && !isPublicRoute && !isShareRoute) {
             router.replace("/login");
         } else if (currentAuth && isPublicRoute) {
             router.replace("/");

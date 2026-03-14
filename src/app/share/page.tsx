@@ -31,10 +31,13 @@ function SharedConversationContent() {
 
   useEffect(() => {
     const fetchSharedConversation = async () => {
+    
       try {
+       
         const res = await fetch(`${API}/api/chat/shared/${id}`);
         if (res.ok) {
           const data = await res.json();
+         
           setConversation(data);
         } else {
           setError("This conversation is not shared or does not exist.");

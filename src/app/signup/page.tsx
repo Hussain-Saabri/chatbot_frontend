@@ -7,8 +7,10 @@ import { motion } from "framer-motion";
 import Logo from "@/components/common/Logo";
 import '@/styles/auth.css';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
+    const router = useRouter();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -32,9 +34,9 @@ export default function SignupPage() {
             const data = await response.json();
 
             if (response.ok) {
-                toast.success('Account created successfully!');
+                
                 setTimeout(() => {
-                    window.location.href = '/login';
+                    router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
                 }, 1000);
             } else {
                 setError(data.error || 'Signup failed. Please try again.');

@@ -109,7 +109,7 @@ export default function ShareModal({
 
                
 
-                <div className="share-footer-hint">
+                <div className="share-footer-hint mt-4">
                     Anyone with the link can view this conversation
                 </div>
             </div>
