@@ -303,6 +303,11 @@
   .auth-form-side {
     padding: var(--spacing-lg);
   }
+  
+  .login-form-side,
+  .signup-form-side {
+    max-width: 600px; /* Maximized width for mobile as requested */
+  }
 }
 
 .auth-form-side {
