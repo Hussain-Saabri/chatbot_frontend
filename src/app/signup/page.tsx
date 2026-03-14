@@ -78,13 +78,7 @@ function SignupContent() {
                     localStorage.setItem('token', data.token);
                     window.dispatchEvent(new Event('nura-auth-update'));
                     
-                    if (data.isNewUser) {
-                        toast.success('Google registration successful!');
-                        setIsExistingUser(false);
-                    } else {
-                        toast.success('Signed in successfully!');
-                        setIsExistingUser(true);
-                    }
+                   
                     
                     sessionStorage.setItem('skip_auth_redirect', 'true');
                     setShowSuccess(true);
