@@ -299,14 +299,19 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .auth-form-side {
-    padding: var(--spacing-lg);
+    padding: 15px;
+    max-width: 100%;
   }
   
   .login-form-side,
   .signup-form-side {
-    max-width: 600px; /* Maximized width for mobile as requested */
+    max-width: 100%; /* Allow it to fill the screen on mobile/tablets */
+  }
+  
+  .auth-card {
+    padding: 24px; /* Slightly tighter padding on small screens to gain width */
   }
 }
 
