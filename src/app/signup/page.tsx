@@ -34,7 +34,9 @@ export default function SignupPage() {
             const data = await response.json();
 
             if (response.ok) {
-                
+                if (data.otpauthUrl) {
+                    sessionStorage.setItem('temp_otpauthUrl', data.otpauthUrl);
+                }
                 setTimeout(() => {
                     router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
                 }, 1000);
@@ -78,7 +80,7 @@ export default function SignupPage() {
                         <Logo size="xl" />
                     </div>
 
-                    <div className="auth-header" style={{ marginTop: '-20px' }}>
+                    <div className="auth-header" style={{ marginTop: '-50px' }}>
                         <h1>Create account</h1>
                     </div>
 
@@ -150,7 +152,9 @@ export default function SignupPage() {
                         </button>
                     </form>
 
-                    <div className="auth-footer" style={{ marginTop: '-30px' }}>
+                    
+
+                    <div className="auth-footer" style={{ marginTop: '-40px' }}>
                         Already have an account? <Link href="/login" className="auth-link">Sign in</Link>
                     </div>
                 </motion.div>

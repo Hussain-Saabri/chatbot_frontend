@@ -1,9 +1,11 @@
-import React, { useState, useRef, KeyboardEvent } from 'react';
+import React, { useState, useRef, KeyboardEvent, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Logo from '@/components/common/Logo';
 import '@/styles/otp.css';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { QRCodeSVG } from 'qrcode.react';
+
 export default function VerifyOTP() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || 'your email address';
@@ -12,7 +14,24 @@ export default function VerifyOTP() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const [isVerifying, setIsVerifying] = useState(false);
-  const [isResending, setIsResending] = useState(false);
+  const [otpauthUrl, setOtpauthUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlOtpauth = urlParams.get('otpauthUrl');
+    const storedUrl = sessionStorage.getItem('temp_otpauthUrl');
+    
+    if (urlOtpauth) {
+      setOtpauthUrl(urlOtpauth);
+      sessionStorage.setItem('temp_otpauthUrl', urlOtpauth);
+      // Clean the URL: remove otpauthUrl from address bar without reloading
+      const newUrl = window.location.pathname + '?email=' + encodeURIComponent(email);
+      window.history.replaceState({}, '', newUrl);
+    } else if (storedUrl) {
+      setOtpauthUrl(storedUrl);
+    }
+  }, [email]);
+
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const handleChange = (index: number, value: string) => {
@@ -98,43 +117,32 @@ export default function VerifyOTP() {
     }
   };
 
-  const handleResend = async () => {
-    setIsResending(true);
-    try {
-      const res = await fetch(`${API}/api/auth/resend-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        toast.success("A new OTP code has been sent!");
-        setOtp(['', '', '', '', '', '']);
-        inputRefs.current[0]?.focus();
-      } else {
-        toast.error(data.error || "Failed to resend OTP");
-      }
-    } catch (err) {
-      toast.error("Network error");
-    } finally {
-      setIsResending(false);
-    }
-  };
-
   return (
     <div className="otp-card">
-      <div className="flex justify-center" style={{ marginBottom: '24px' }}>
+      <div className="flex justify-center" style={{ marginBottom: '18px' }}>
         <Logo size="xl" />
       </div>
       
-      <h1 className="otp-title">Verify OTP</h1>
+      <h1 className="otp-title">Authenticator Setup</h1>
       
-      <p className="otp-subtitle">
-        Enter the 6-digit code sent to<br />
-        <span className="otp-email">{email}</span>
-      </p>
+      {otpauthUrl ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
+          <p className="otp-subtitle" style={{ marginBottom: '16px' }}>
+            Scan this QR code with your Google Authenticator 
+          </p>
+          <div className="qr-container">
+            <QRCodeSVG value={otpauthUrl} size={130} style={{ maxWidth: '100%', height: 'auto' }} />
+          </div>
+          <p className="otp-subtitle" style={{ marginTop: '15px', marginBottom: '10px' }}>
+            Then, enter the 6-digit code from the app below:
+          </p>
+        </div>
+      ) : (
+        <p className="otp-subtitle">
+          Open your Authenticator app and enter the 6-digit code for<br />
+          <span className="otp-email">{email}</span>
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <div className="otp-inputs">
@@ -159,22 +167,9 @@ export default function VerifyOTP() {
         </div>
 
         <button type="submit" className="otp-button" disabled={isVerifying || otp.join('').length !== 6}>
-          {isVerifying ? "Verifying..." : "Verify "}
+          {isVerifying ? "Verifying..." : "Verify Code"}
         </button>
       </form>
-
-      <div className="otp-footer">
-        Didn't get the code? 
-        <button 
-          type="button" 
-          className="otp-resend ml-1" 
-          onClick={handleResend}
-          disabled={isResending}
-          style={isResending ? { opacity: 0.5, cursor: "not-allowed" } : {}}
-        >
-          {isResending ? "Sending..." : "Resend OTP"}
-        </button>
-      </div>
     </div>
   );
 }

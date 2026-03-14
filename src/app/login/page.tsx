@@ -42,6 +42,14 @@ export default function LoginPage() {
                 setTimeout(() => {
                     router.push("/");
                 }, 500);
+            } else if (response.status === 403 && data.unverifiedEmail) {
+                if (data.otpauthUrl) {
+                    sessionStorage.setItem('temp_otpauthUrl', data.otpauthUrl);
+                }
+                toast.error(data.error);
+                setTimeout(() => {
+                    router.push(`/verify-otp?email=${encodeURIComponent(data.unverifiedEmail)}`);
+                }, 1000);
             } else {
                 setError(data.error || 'Login failed. Please try again.');
             }
@@ -142,6 +150,10 @@ export default function LoginPage() {
                             )}
                         </button>
                     </form>
+
+                    
+
+                    
 
                     <div className="auth-footer">
                         Don't have an account? <Link href="/signup" className="auth-link">Create account</Link>
