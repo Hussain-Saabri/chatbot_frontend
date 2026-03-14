@@ -50,12 +50,12 @@ export default function Logo({
     return (
         <div className={`flex items-center select-none cursor-default ${className}`}>
             <svg
-                width={finalWidth}
+                width={width || "100%"}
                 height={finalHeight}
-                viewBox="0 0 200 60"
+                viewBox="0 0 180 60"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                style={{ height: finalHeight, width: finalWidth }}
+                style={{ height: finalHeight, maxWidth: '100%', width: width || 'auto' }}
             >
                 <rect x="10" y="10" width="40" height="40" rx="8" fill="#2bbf90" />
                 <path d="M22 20V40M22 20L38 40V20" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />

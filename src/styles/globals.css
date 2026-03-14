@@ -38,6 +38,10 @@ html {
   --spacing-xl: 3rem;
 
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Font Families from Next.js */
+  --font-main: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-display: var(--font-outfit), 'Outfit', system-ui, sans-serif;
 }
 
 [data-theme='dark'] {

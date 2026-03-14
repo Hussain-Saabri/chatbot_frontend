@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "../styles/globals.css";
 import "../styles/components.css";
 import { ThemeProvider } from "@/components/ThemeContext";
 import { LayoutProvider } from "@/components/layout/LayoutContext";
 import { Toaster } from "sonner";
+import AuthGuard from "@/components/auth/AuthGuard";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +34,6 @@ export const viewport = {
   interactiveWidget: "resizes-content",
 };
 
-import AuthGuard from "@/components/auth/AuthGuard";
 
 export default function RootLayout({
   children,
@@ -37,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>
+      <body className={`${inter.variable} ${outfit.variable}`}>
         <ThemeProvider>
           <AuthGuard>
             <LayoutProvider>

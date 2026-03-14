@@ -84,7 +84,11 @@ export default function AuthGuard({ children }: AuthGuardProps) {
         if (!currentAuth && !isPublicRoute && !isShareRoute) {
             router.replace("/login");
         } else if (currentAuth && isPublicRoute) {
-            router.replace("/");
+            // Check if we should skip the immediate redirect (for success animations)
+            const skipRedirect = sessionStorage.getItem("skip_auth_redirect") === "true";
+            if (!skipRedirect) {
+                router.replace("/");
+            }
         }
     }, [isMounted, showSplash, isAuthenticated, isPublicRoute, router]);
 
