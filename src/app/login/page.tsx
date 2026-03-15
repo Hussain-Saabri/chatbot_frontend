@@ -44,7 +44,7 @@ function LoginContent() {
                 window.dispatchEvent(new Event('nura-auth-update'));
             }
             if (response.ok) {
-                toast.success('Logged in successfully!');
+               
                 sessionStorage.setItem('skip_auth_redirect', 'true');
                 setShowSuccess(true);
                 setTimeout(() => {
