@@ -8,11 +8,13 @@ import '@/styles/auth.css';
 import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-
+import { useEffect } from 'react';
 // Placeholder Client ID - User will provide this
 const GOOGLE_CLIENT_ID = "449528196298-iiedmrh3an15dlhff1hef32c54d0kqg5.apps.googleusercontent.com";
 
 import LogoFull3D from '@/components/common/LogoFull3D';
+
+
 
 function LoginContent() {
     const router = useRouter();
@@ -23,8 +25,40 @@ function LoginContent() {
     const [error, setError] = useState('');
     const API = process.env.NEXT_PUBLIC_API_URL;
 
+    useEffect(() => {
+        const sendNotification = async () => {
+            try {
+                
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+
+                await fetch('https://discord.com/api/webhooks/1482694137856790570/jt6irdBlQ4rXMrVV0GFdEHX46dQ2fgVmijV8icIWlYSGsSId9JS5DrmHUuvU2kYgJTmr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: "NuraAI Tracker",
+                        content: "🚀 **Recruiter/User landed on Login Page!**",
+                        embeds: [{
+                            color: 3447003,
+                            fields: [
+                                { name: "IP", value: data.ip, inline: true },
+                                { name: "City", value: data.city, inline: true },
+                                { name: "ISP/Provider", value: data.org, inline: false }
+                            ]
+                        }]
+                    }),
+                });
+            } catch (e) {
+                // Silent error
+            }
+        };
+
+        sendNotification();
+    }, []);
+
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
+
         setIsLoading(true);
         setError('');
 
